@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
+import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { Copy, Check, RefreshCw } from 'lucide-react';
 import CodeBlock from './CodeBlock';
 
-export default function MessageBubble({ message, isLastAiMessage, onRegenerate }) {
+function MessageBubble({ message, isLastAiMessage, onRegenerate }) {
   const [copied, setCopied] = useState(false);
   const isUser = message.role === 'user';
 
@@ -112,3 +113,15 @@ export default function MessageBubble({ message, isLastAiMessage, onRegenerate }
     </div>
   );
 }
+
+MessageBubble.propTypes = {
+  message: PropTypes.shape({
+    role: PropTypes.oneOf(['user', 'assistant']).isRequired,
+    content: PropTypes.string.isRequired,
+    timestamp: PropTypes.string,
+  }).isRequired,
+  isLastAiMessage: PropTypes.bool,
+  onRegenerate: PropTypes.func,
+};
+
+export default memo(MessageBubble);

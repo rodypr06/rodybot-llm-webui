@@ -23,6 +23,7 @@ export function useOllama() {
   // Load models on mount
   useEffect(() => {
     loadModels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadModels = async () => {

@@ -1,14 +1,28 @@
-import { useState } from 'react';
+import { useState, memo, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { ChevronDown, Check } from 'lucide-react';
-import useChatStore from '../hooks/useChatStore';
 
-export default function ModelSelector({ models, currentModel, onModelChange }) {
+function ModelSelector({ models, currentModel, onModelChange }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = (modelName) => {
+  const handleSelect = useCallback((modelName) => {
     onModelChange(modelName);
     setIsOpen(false);
-  };
+  }, [onModelChange]);
+
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [isOpen]);
 
   const currentModelData = models.find(m => m.name === currentModel);
 
@@ -21,6 +35,9 @@ export default function ModelSelector({ models, currentModel, onModelChange }) {
           transition-smooth hover:electric-glow-subtle
           border border-white/10
         "
+        aria-label="Select model"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
       >
         <div className="flex flex-col items-start min-w-0">
           <span className="text-[10px] sm:text-xs text-white-smoke/60 font-inter">Model</span>
@@ -40,12 +57,16 @@ export default function ModelSelector({ models, currentModel, onModelChange }) {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="
-            absolute top-full mt-2 right-0 w-[280px] sm:min-w-[250px]
-            glass-effect rounded-xl border border-white/10
-            max-h-[60vh] sm:max-h-[400px] overflow-y-auto scrollbar-thin
-            z-20 shadow-2xl
-          ">
+          <div
+            className="
+              absolute top-full mt-2 right-0 w-[280px] sm:min-w-[250px]
+              glass-effect rounded-xl border border-white/10
+              max-h-[60vh] sm:max-h-[400px] overflow-y-auto scrollbar-thin
+              z-20 shadow-2xl
+            "
+            role="listbox"
+            aria-label="Available models"
+          >
             {models.length === 0 ? (
               <div className="p-4 text-white-smoke/60 text-sm text-center">
                 No models available
@@ -60,6 +81,8 @@ export default function ModelSelector({ models, currentModel, onModelChange }) {
                     hover:bg-electric-blue/10 active:bg-electric-blue/20 border-b border-white/5
                     last:border-b-0 flex items-center justify-between
                   "
+                  role="option"
+                  aria-selected={model.name === currentModel}
                 >
                   <div className="flex-1 min-w-0 pr-2">
                     <div className="font-poppins font-medium text-white-smoke text-sm truncate">
@@ -87,3 +110,16 @@ function formatBytes(bytes) {
   const gb = bytes / (1024 ** 3);
   return `${gb.toFixed(1)} GB`;
 }
+
+ModelSelector.propTypes = {
+  models: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      size: PropTypes.number,
+    })
+  ).isRequired,
+  currentModel: PropTypes.string,
+  onModelChange: PropTypes.func.isRequired,
+};
+
+export default memo(ModelSelector);

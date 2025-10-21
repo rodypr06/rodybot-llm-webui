@@ -44,6 +44,8 @@ const useChatStore = create(
 
       setError: (error) => set({ error }),
 
+      clearError: () => set({ error: null }),
+
       setAbortController: (controller) => set({ abortController: controller }),
 
       stopGeneration: () => {

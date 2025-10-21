@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
 import { Send, Square } from 'lucide-react';
 import useChatStore from '../hooks/useChatStore';
 
-export default function ChatInput({ onSend, disabled }) {
+function ChatInput({ onSend, disabled }) {
   const [input, setInput] = useState('');
   const textareaRef = useRef(null);
   const { isGenerating, stopGeneration } = useChatStore();
@@ -90,3 +91,10 @@ export default function ChatInput({ onSend, disabled }) {
     </div>
   );
 }
+
+ChatInput.propTypes = {
+  onSend: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+export default memo(ChatInput);

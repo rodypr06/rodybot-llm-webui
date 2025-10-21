@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
+import PropTypes from 'prop-types';
 import useChatStore from '../hooks/useChatStore';
 import MessageBubble from './MessageBubble';
 import EmptyState from './EmptyState';
 
-export default function ChatContainer({ currentModel, onRegenerate }) {
+function ChatContainer({ currentModel, onRegenerate }) {
   const { messages } = useChatStore();
   const containerRef = useRef(null);
   const bottomRef = useRef(null);
@@ -45,3 +46,10 @@ export default function ChatContainer({ currentModel, onRegenerate }) {
     </div>
   );
 }
+
+ChatContainer.propTypes = {
+  currentModel: PropTypes.string,
+  onRegenerate: PropTypes.func.isRequired,
+};
+
+export default memo(ChatContainer);

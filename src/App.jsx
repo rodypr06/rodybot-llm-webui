@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import Header from './components/Header';
 import ChatContainer from './components/ChatContainer';
 import ChatInput from './components/ChatInput';
@@ -17,21 +17,21 @@ function App() {
 
   const { setCurrentModel, isLoading } = useChatStore();
 
-  const handleSendMessage = (message) => {
+  const handleSendMessage = useCallback((message) => {
     sendMessage(message);
-  };
+  }, [sendMessage]);
 
-  const handleModelChange = (modelName) => {
+  const handleModelChange = useCallback((modelName) => {
     setCurrentModel(modelName);
-  };
+  }, [setCurrentModel]);
 
-  const handleRefreshModels = () => {
+  const handleRefreshModels = useCallback(() => {
     loadModels();
-  };
+  }, [loadModels]);
 
-  const handleRegenerate = () => {
+  const handleRegenerate = useCallback(() => {
     regenerateResponse();
-  };
+  }, [regenerateResponse]);
 
   return (
     <div className="h-screen w-screen flex flex-col overflow-hidden safe-area-inset">

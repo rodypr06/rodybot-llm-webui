@@ -1,6 +1,8 @@
+import { memo } from 'react';
+import PropTypes from 'prop-types';
 import { MessageSquare, Sparkles } from 'lucide-react';
 
-export default function EmptyState({ modelName }) {
+function EmptyState({ modelName }) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-6">
       <div className="glass-effect rounded-full p-8 mb-6 electric-glow-subtle">
@@ -52,3 +54,14 @@ function SuggestionCard({ title, description }) {
     </div>
   );
 }
+
+SuggestionCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
+EmptyState.propTypes = {
+  modelName: PropTypes.string,
+};
+
+export default memo(EmptyState);

@@ -1,9 +1,11 @@
+import { memo } from 'react';
+import PropTypes from 'prop-types';
 import { Trash2, RefreshCw, AlertCircle } from 'lucide-react';
 import useChatStore from '../hooks/useChatStore';
 import ModelSelector from './ModelSelector';
 
-export default function Header({ models, currentModel, onModelChange, onRefreshModels }) {
-  const { clearMessages, messages, isLoading, error } = useChatStore();
+function Header({ models, currentModel, onModelChange, onRefreshModels }) {
+  const { clearMessages, messages, isLoading, error, clearError } = useChatStore();
 
   const handleClearChat = () => {
     if (messages.length > 0) {
@@ -40,9 +42,16 @@ export default function Header({ models, currentModel, onModelChange, onRefreshM
 
         {/* Error indicator - Hidden on mobile */}
         {error && (
-          <div className="hidden md:flex items-center gap-2 text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">
+          <div className="hidden md:flex items-center gap-2 text-red-400 bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
             <AlertCircle size={16} />
-            <span className="text-xs font-inter">{error}</span>
+            <span className="text-xs font-inter flex-1">{error}</span>
+            <button
+              onClick={clearError}
+              className="text-red-400/70 hover:text-red-400 transition-smooth ml-2"
+              aria-label="Dismiss error"
+            >
+              ✕
+            </button>
           </div>
         )}
 
@@ -89,11 +98,32 @@ export default function Header({ models, currentModel, onModelChange, onRefreshM
 
       {/* Mobile Error Toast */}
       {error && (
-        <div className="md:hidden mt-2 flex items-center gap-2 text-red-400 bg-red-500/10 px-3 py-2 rounded-lg text-xs">
+        <div className="md:hidden mt-2 flex items-center gap-2 text-red-400 bg-red-500/10 px-3 py-2 rounded-lg text-xs border border-red-500/20">
           <AlertCircle size={14} />
-          <span className="font-inter truncate">{error}</span>
+          <span className="font-inter flex-1 truncate">{error}</span>
+          <button
+            onClick={clearError}
+            className="text-red-400/70 hover:text-red-400 transition-smooth"
+            aria-label="Dismiss error"
+          >
+            ✕
+          </button>
         </div>
       )}
     </header>
   );
 }
+
+Header.propTypes = {
+  models: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      size: PropTypes.number,
+    })
+  ).isRequired,
+  currentModel: PropTypes.string,
+  onModelChange: PropTypes.func.isRequired,
+  onRefreshModels: PropTypes.func.isRequired,
+};
+
+export default memo(Header);

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
+import PropTypes from 'prop-types';
 import { Check, Copy } from 'lucide-react';
 
-export default function CodeBlock({ children, className, ...props }) {
+function CodeBlock({ children, className, ...props }) {
   const [copied, setCopied] = useState(false);
 
   // Extract language from className (e.g., "language-javascript")
@@ -64,3 +65,10 @@ export default function CodeBlock({ children, className, ...props }) {
     </div>
   );
 }
+
+CodeBlock.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};
+
+export default memo(CodeBlock);
