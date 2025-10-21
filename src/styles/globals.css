@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --charcoal: #1C1C1E;
+    --deep-gray: #2B2B2E;
+    --electric-blue: #007BFF;
+    --white-smoke: #F5F5F7;
+    --accent-glow: rgba(0, 123, 255, 0.4);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+  }
+
+  html {
+    /* Prevent text size adjustment on orientation change */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--charcoal) 0%, var(--deep-gray) 100%);
+    color: var(--white-smoke);
+    overflow: hidden;
+    /* Improve font rendering on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  code {
+    font-family: 'Fira Code', monospace;
+  }
+
+  /* Better touch interaction */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    background: rgba(43, 43, 46, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .electric-glow {
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+  }
+
+  .electric-glow-subtle {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+  }
+
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--electric-blue) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--electric-blue);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+  }
+
+  /* Safe area insets for mobile devices (notches, etc.) */
+  .safe-area-inset {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Touch-friendly sizing */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Markdown styles */
+.markdown-content {
+  @apply text-white-smoke;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.markdown-content p {
+  @apply mb-3 sm:mb-4;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  @apply font-poppins font-semibold mb-2 sm:mb-3 mt-3 sm:mt-4;
+}
+
+.markdown-content h1 {
+  @apply text-xl sm:text-2xl;
+}
+
+.markdown-content h2 {
+  @apply text-lg sm:text-xl;
+}
+
+.markdown-content h3 {
+  @apply text-base sm:text-lg;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply ml-4 sm:ml-6 mb-3 sm:mb-4;
+}
+
+.markdown-content li {
+  @apply mb-1;
+}
+
+.markdown-content code {
+  @apply bg-charcoal px-1.5 py-0.5 rounded text-xs sm:text-sm font-fira-code;
+  word-break: break-all;
+}
+
+.markdown-content pre {
+  @apply bg-charcoal rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 overflow-x-auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.markdown-content pre code {
+  @apply bg-transparent p-0;
+  word-break: normal;
+}
+
+.markdown-content a {
+  @apply text-electric-blue hover:underline;
+  word-break: break-word;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-electric-blue pl-3 sm:pl-4 italic my-3 sm:my-4;
+}
+
+.markdown-content table {
+  @apply w-full border-collapse mb-3 sm:mb-4 text-xs sm:text-sm;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.markdown-content th,
+.markdown-content td {
+  @apply border border-deep-gray px-2 sm:px-4 py-1.5 sm:py-2;
+}
+
+.markdown-content th {
+  @apply bg-deep-gray font-semibold;
+}
+
+/* Animation keyframes */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
